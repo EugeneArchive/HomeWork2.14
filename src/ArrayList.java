@@ -1,99 +1,113 @@
 
-import exceptions.BadRequest;
-import exceptions.IncorrectNumberOfMassive;
-import exceptions.ValueISNullException;
+import exceptions.*;
 
 import java.util.Arrays;
 
 public class ArrayList implements StringList {
     private String[] items;
-    private int realSize = 0;
+    private int size;
 
-    public ArrayList(int size) {
-        this.items = new String[size];
+    public ArrayList(int length) {
+        items = new String[length];
+    }
+
+    public ArrayList() {
+        items = new String[10];
     }
 
     private String[] grow() {
         int oldCapacity = items.length;
-        // int newCapacity = oldCapacity + (oldCapacity >> 1) + 1;
-        int newCapacity = oldCapacity + 1;
+        int newCapacity = oldCapacity + (oldCapacity >> 1);
         return items = Arrays.copyOf(items, newCapacity);
     }
 
-    private void checkNull(String item) {
+    private void validateSize() {
+        if (size == items.length) {
+            throw new StorageIsFullException();
+        }
+    }
+
+    private void validateItem(String item) {
         if (item == null) {
-            throw new ValueISNullException("Строка пустая");
+            throw new ValueIsNullException("Строка пустая");
+        }
+    }
+
+    private void validateIndex(int index) {
+        if (index < 0 || index > size) {
+            throw new IncorrectNumberOfMassive("Некорректный индекс");
         }
     }
 
     @Override
     public String add(String item) {
-        checkNull(item);
-        for (int i = 0; i < items.length; i++) {
-            if (items[i] == null) {
-                items[i] = item;
-                realSize++;
-                return item;
-            }
+        validateItem(item);
+        if (size == items.length) {
+            items = grow();
         }
-
-        items = grow();
-        items[items.length - 1] = item;
-        realSize++;
+        items[size++] = item;
         return item;
     }
 
 
     @Override
     public String add(int index, String item) {
-        checkNull(item);
+        validateItem(item);
+        validateIndex(index);
+        if (size == index) {
+            items[size++] = item;
+            return item;
+        }
+        if (size == items.length) {
+            items = grow();
+        }
+        System.arraycopy(items, index, items, index + 1, size - index);
         items[index] = item;
-        realSize++;
+        size++;
         return item;
     }
 
     @Override
     public String set(int index, String item) {
-        checkNull(item);
-        if (index >= items.length) {
-            throw new IncorrectNumberOfMassive("Индекс добавления от 0 до " + (items.length - 1));
-        }
+        validateItem(item);
+        validateIndex(index);
+
         items[index] = item;
-        realSize++;
         return item;
     }
 
     @Override
     public String remove(String item) {
-        checkNull(item);
-        for (int i = 0; i < size(); i++) {
-            if (items[i] == item) {
-                String r = items[i];
-                items[i] = null;
-                return r;
-            }
+        validateItem(item);
+        int index = indexOf(item);
+        if (index == -1) {
+            throw new BadRequest("Элемент не найден!");
         }
-        throw new BadRequest("Элемент не найден!");
+        if (!(index == size)) {
+            System.arraycopy(items, index + 1, items, index, size - index - 1);
+        }
+        size--;
+        return item;
     }
+
 
     @Override
     public String remove(int index) {
-        if (index >= items.length || index > size()) {
-            throw new BadRequest("Элемент не найден!");
+        validateIndex(index);
+
+        String item = items[index];
+        if (!(index == size)) {
+            System.arraycopy(items, index + 1, items, index, size - index - 1);
         }
-        String r = items[index];
-        items[index] = null;
-        return r;
+        size--;
+        return item;
     }
 
     @Override
     public boolean contains(String item) {
-        checkNull(item);
-        for (int i = 0; i < items.length; i++) {
-            if (items[i] == null) {
-                continue;
-            }
-            if(items[i].contains(item))
+        validateItem(item);
+        for (int i = 0; i < size; i++) {
+            if (items[i].contains(item))
                 return true;
         }
         return false;
@@ -101,7 +115,8 @@ public class ArrayList implements StringList {
 
     @Override
     public int indexOf(String item) {
-        for (int i = 0; i < items.length - 1; i++) {
+        validateItem(item);
+        for (int i = 0; i < size; i++) {
             if (items[i].equals(item)) {
                 return i;
             }
@@ -111,10 +126,8 @@ public class ArrayList implements StringList {
 
     @Override
     public int lastIndexOf(String item) {
-        for (int i = items.length - 1; i > 0; i--) {
-            if (items[i] == null) {
-                continue;
-            }
+        validateItem(item);
+        for (int i = size - 1; i >= 0; i--) {
             if (items[i].equals(item)) {
                 return i;
             }
@@ -124,18 +137,13 @@ public class ArrayList implements StringList {
 
     @Override
     public String get(int index) {
-        if (index >= items.length) {
-            throw new IncorrectNumberOfMassive("Индекс добавления от 0 до " + (items.length - 1));
-        }
+        validateIndex(index);
         return items[index];
     }
 
     @Override
     public boolean equals(StringList otherList) {
-        if (otherList == null) {
-            throw new BadRequest("Неверные данные!");
-        }
-        if (Arrays.equals(items, otherList.toArray())) {
+        if (Arrays.equals(this.items, otherList.toArray())) {
             return true;
         }
         return false;
@@ -143,13 +151,13 @@ public class ArrayList implements StringList {
 
     @Override
     public int size() {
-        return realSize;
+        return size;
     }
 
 
     @Override
     public boolean isEmpty() {
-        if (size() == 0) {
+        if (size == 0) {
             return true;
         }
         return false;
@@ -157,14 +165,14 @@ public class ArrayList implements StringList {
 
     @Override
     public void clear() {
-        for (int i = 0; i < size(); i++) {
-           items[i] = null;
-        }
-        realSize = 0;
+//        for (int i = 0; i < size; i++) {
+//           items[i] = null;
+//        }
+        size = 0;
     }
 
     @Override
     public String[] toArray() {
-        return new String[0];
+        return Arrays.copyOf(items, size);
     }
 }

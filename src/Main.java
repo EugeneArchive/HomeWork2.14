@@ -8,12 +8,19 @@ public class Main {
 //        System.out.println(stringList.add("rdtg1"));
 //        System.out.println(stringList.add("rdtg2"));
 
-        stringList.add("rdtg3");
+        stringList.add("rdtg0");
+        for (int i = 0; i < stringList.size(); i++) {
+            System.out.println(stringList.get(i));
+        }
         stringList.add("rdtg1");
-        stringList.add("rdtg32");
-        stringList.add("rdtg32");
-        stringList.add("rdtg32");
-        stringList.add("rdtg32");
+        System.out.println(stringList.size());
+        for (int i = 0; i < stringList.size(); i++) {
+            System.out.println(stringList.get(i));
+        }
+        stringList.add("rdtg2");
+        stringList.add("rdtg3");
+        stringList.add("rdtg4");
+        stringList.add("rdtg5");
         for (int i = 0; i < stringList.size(); i++) {
             System.out.println(stringList.get(i));
         }

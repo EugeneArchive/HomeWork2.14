@@ -1,20 +1,22 @@
+import exceptions.BadRequest;
+import exceptions.IncorrectNumberOfMassive;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayListTest {
-    StringList out = new ArrayList(6);
-    StringList out2 = new ArrayList(6);
+    StringList out = new ArrayList(3);
+    StringList out2 = new ArrayList(3);
 
     @BeforeEach
     public void setOut() {
         out.add("qwe");
         out.add("qwe2");
-        out.add("qwe");
+        out.add("qwe3");
         out2.add("qwe");
         out2.add("qwe2");
-        out2.add("qwe");
+        out2.add("qwe3");
     }
 
 
@@ -77,14 +79,16 @@ class ArrayListTest {
 
     @Test
     void get() {
+        String expected = out.get(1);
+        String actual = "qwe2";
+        assertEquals(expected, actual);
     }
 
     @Test
     void testEquals() {
         boolean expected = out.equals(out2);
         boolean actual = true;
-        System.out.println(out.size());
-        System.out.println(out2.size());
+
         assertEquals(expected, actual);
     }
 
@@ -113,5 +117,11 @@ class ArrayListTest {
 
     @Test
     void toArray() {
+    }
+    @Test
+    public void shouldThrowIllegalArgumentException() {
+        assertThrows(BadRequest.class, () -> out.remove("refd"));
+        assertThrows(IncorrectNumberOfMassive.class, () -> out.remove(7));
+        assertThrows(IncorrectNumberOfMassive.class, () -> out.get(7));
     }
 }
