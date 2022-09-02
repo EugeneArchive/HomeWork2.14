@@ -105,12 +105,13 @@ public class ArrayList implements StringList {
 
     @Override
     public boolean contains(String item) {
-        validateItem(item);
-        for (int i = 0; i < size; i++) {
-            if (items[i].contains(item))
-                return true;
-        }
-        return false;
+//        validateItem(item);
+//        for (int i = 0; i < size; i++) {
+//            if (items[i].contains(item))
+//                return true;
+//        }
+//        return false;
+        return indexOf(item) != -1;
     }
 
     @Override

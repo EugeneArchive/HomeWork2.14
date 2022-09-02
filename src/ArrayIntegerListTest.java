@@ -7,87 +7,86 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayListTest {
-    StringList out = new ArrayList(3);
-    StringList out2 = new ArrayList(3);
+class ArrayIntegerListTest {
+    IntegerList out = new ArrayIntegerList(3);
+    IntegerList out2 = new ArrayIntegerList(3);
 
     @BeforeEach
     public void setOut() {
-        out.add("qwe");
-        out.add("qwe2");
-        out.add("qwe3");
-        out2.add("qwe");
-        out2.add("qwe2");
-        out2.add("qwe3");
+        out.add(12);
+        out.add(13);
+        out.add(14);
+        out2.add(12);
+        out2.add(13);
+        out2.add(14);
     }
-
 
     @Test
     void add() {
-        String expected = out.add("abc");
-        String actual = "abc";
+        Integer expected = out.add(15);
+        Integer actual = 15;
         assertEquals(expected, actual);
     }
 
     @Test
     void testAdd() {
-        String expected = out.add(1, "abc");
-        String actual = "abc";
+        Integer expected = out.add(1, 15);
+        Integer actual = 15;
         assertEquals(expected, actual);
     }
 
     @Test
     void set() {
-        String expected = out.add(1, "abc");
-        String actual = "abc";
+        Integer expected = out.add(1, 15);
+        Integer actual = 15;
         assertEquals(expected, actual);
     }
 
     @Test
     void remove() {
-        String expected = out.remove("qwe2");
-        String actual = "qwe2";
+        Integer expected = out.removeByItem(12);
+        Integer actual = 12;
         assertEquals(expected, actual);
     }
 
     @Test
     void testRemove() {
-        String expected = out.remove(1);
-        String actual = "qwe2";
+        Integer expected = out.remove(1);
+        Integer actual = 13;
         assertEquals(expected, actual);
     }
 
     @Test
     void contains() {
-        out.add(1, "abc");
-        boolean expected = out.contains("abc");
+        boolean expected = out.contains(12);
         boolean actual = true;
         assertEquals(expected, actual);
     }
 
     @Test
     void indexOf() {
-        int expected = out.indexOf("qwe");
+        int expected = out.indexOf(12);
         int actual = 0;
         assertEquals(expected, actual);
     }
 
     @Test
     void lastIndexOf() {
-        int expected = out.lastIndexOf("qwe");
-        int actual = 2;
+        int expected = out.indexOf(13);
+        int actual = 1;
         assertEquals(expected, actual);
     }
 
     @Test
     void get() {
-        String expected = out.get(1);
-        String actual = "qwe2";
+        int expected = out.get(1);
+        int actual = 13;
         assertEquals(expected, actual);
     }
 
     @Test
     void testEquals() {
+
         boolean expected = out.equals(out2);
         boolean actual = true;
 
@@ -97,7 +96,7 @@ class ArrayListTest {
     @Test
     void size() {
         int expected = out.size();
-        int actual = 2;
+        int actual = 3;
         assertEquals(expected, actual);
     }
 
@@ -109,6 +108,7 @@ class ArrayListTest {
         assertEquals(expected, actual);
     }
 
+
     @Test
     void clear() {
         out.clear();
@@ -119,14 +119,15 @@ class ArrayListTest {
 
     @Test
     void toArray() {
-        String[] a = {"qwe", "qwe2", "qwe3"};
+        Integer[] a = {12, 13, 14};
         boolean expected = Arrays.equals(out.toArray(), a);
         boolean actual = true;
         assertEquals(expected, actual);
     }
+
     @Test
     public void shouldThrowIllegalArgumentException() {
-        assertThrows(BadRequest.class, () -> out.remove("refd"));
+        assertThrows(BadRequest.class, () -> out.removeByItem(15));
         assertThrows(IncorrectNumberOfMassive.class, () -> out.remove(7));
         assertThrows(IncorrectNumberOfMassive.class, () -> out.get(7));
     }
