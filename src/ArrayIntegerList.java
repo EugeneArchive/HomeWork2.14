@@ -110,12 +110,12 @@ public class ArrayIntegerList implements IntegerList {
 
     @Override
     public boolean contains(Integer item) {
-        binaryFind(integers, item);
-      return indexOf(item) != -1;
+        Integer[] integersCopy = toArray();
+        sortInsertion(integersCopy);
+        return binaryFind(integers, item);
     }
 
     private static boolean binaryFind(Integer[] arr, Integer item) {
-        sortInsertion(arr);
         int min = 0;
         int max = arr.length - 1;
 
