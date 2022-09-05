@@ -34,17 +34,17 @@ public class ArrayIntegerList implements IntegerList {
         }
     }
 
-    private static void sortInsertion(Integer[] arr) {
-        for (int i = 1; i < arr.length; i++) {
-            int temp = arr[i];
-            int j = i;
-            while (j > 0 && arr[j - 1] >= temp) {
-                arr[j] = arr[j - 1];
-                j--;
-            }
-            arr[j] = temp;
-        }
-    }
+//    private static void sortInsertion(Integer[] arr) {
+//        for (int i = 1; i < arr.length; i++) {
+//            int temp = arr[i];
+//            int j = i;
+//            while (j > 0 && arr[j - 1] >= temp) {
+//                arr[j] = arr[j - 1];
+//                j--;
+//            }
+//            arr[j] = temp;
+//        }
+//    }
 
 
     @Override
@@ -78,7 +78,6 @@ public class ArrayIntegerList implements IntegerList {
     public Integer set(int index, Integer item) {
         validateItem(item);
         validateIndex(index);
-
         integers[index] = item;
         return item;
     }
@@ -111,7 +110,7 @@ public class ArrayIntegerList implements IntegerList {
     @Override
     public boolean contains(Integer item) {
         Integer[] integersCopy = toArray();
-        sortInsertion(integersCopy);
+        quickSort(integersCopy, 0, size-1);
         return binaryFind(integers, item);
     }
 
@@ -194,5 +193,38 @@ public class ArrayIntegerList implements IntegerList {
     @Override
     public Integer[] toArray() {
         return Arrays.copyOf(integers, size);
+    }
+
+
+    public static void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
+
+    private static int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
+    private static void swapElements(Integer[] arr, int indexA, int indexB) {
+        int tmp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = tmp;
     }
 }

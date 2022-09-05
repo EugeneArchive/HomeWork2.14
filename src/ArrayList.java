@@ -166,9 +166,6 @@ public class ArrayList implements StringList {
 
     @Override
     public void clear() {
-//        for (int i = 0; i < size; i++) {
-//           items[i] = null;
-//        }
         size = 0;
     }
 
