@@ -17,9 +17,10 @@ public class ArrayIntegerList implements IntegerList {
     }
 
     private Integer[] grow() {
-        int oldCapacity = integers.length;
-        int newCapacity = oldCapacity + (oldCapacity >> 1);
-        return integers = Arrays.copyOf(integers, newCapacity);
+//        int oldCapacity = integers.length;
+//        int newCapacity = oldCapacity + (oldCapacity >> 1);
+//        return integers = Arrays.copyOf(integers, newCapacity);
+       return integers = Arrays.copyOf(integers, size + size / 2);
     }
 
     private void validateItem(Integer item) {
